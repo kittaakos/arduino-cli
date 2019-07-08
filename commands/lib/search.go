@@ -50,6 +50,10 @@ func LibrarySearch(ctx context.Context, req *rpc.LibrarySearchReq) (*rpc.Library
 				Latest:   latest,
 			}
 			res = append(res, searchedlib)
+			if len(res) > 100 {
+				// enough libraries - at some point we hit the gRPC message size limit
+				break
+			}
 		}
 	}
 

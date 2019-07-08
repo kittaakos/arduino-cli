@@ -18,17 +18,16 @@
 package board
 
 import (
-	"context"
 	"fmt"
-	"os"
-	"sort"
 	"time"
 
+	"github.com/arduino/arduino-cli/arduino/cores/packagemanager"
 	"github.com/arduino/arduino-cli/cli"
-	"github.com/arduino/arduino-cli/commands/board"
+	"github.com/arduino/arduino-cli/commands"
 	"github.com/arduino/arduino-cli/common/formatter"
 	"github.com/arduino/arduino-cli/output"
-	rpc "github.com/arduino/arduino-cli/rpc/commands"
+	discovery "github.com/arduino/board-discovery"
+	"github.com/codeclysm/cc"
 	"github.com/spf13/cobra"
 )
 
@@ -52,64 +51,95 @@ var listFlags struct {
 }
 
 // runListCommand detects and lists the connected arduino boards
+// (either via serial or network ports).
 func runListCommand(cmd *cobra.Command, args []string) {
-	instance := cli.CreateInstance()
+	pm := commands.InitPackageManager()
 
-	if timeout, err := time.ParseDuration(listFlags.timeout); err != nil {
-		formatter.PrintError(err, "Invalid timeout.")
-		os.Exit(cli.ErrBadArgument)
-	} else {
-		time.Sleep(timeout)
-	}
-
-	resp, err := board.List(context.Background(), &rpc.BoardListReq{Instance: instance})
+	monitor := discovery.New(time.Millisecond)
+	monitor.Start()
+	duration, err := time.ParseDuration(listFlags.timeout)
 	if err != nil {
-		formatter.PrintError(err, "Error detecting boards")
-		os.Exit(cli.ErrNetwork)
+		duration = time.Second * 5
+	}
+	if formatter.IsCurrentFormat("text") {
+		stoppable := cc.Run(func(stop chan struct{}) {
+			for {
+				select {
+				case <-stop:
+					fmt.Print("\r              \r")
+					return
+				default:
+					fmt.Print("\rDiscovering.  ")
+					time.Sleep(time.Millisecond * 500)
+					fmt.Print("\rDiscovering.. ")
+					time.Sleep(time.Millisecond * 500)
+					fmt.Print("\rDiscovering...")
+					time.Sleep(time.Millisecond * 500)
+				}
+			}
+		})
+
+		fmt.Print("\r")
+
+		time.Sleep(duration)
+		stoppable.Stop()
+		<-stoppable.Stopped
+	} else {
+		time.Sleep(duration)
 	}
 
-	if cli.OutputJSONOrElse(resp) {
-		outputListResp(resp)
-	}
+	formatter.Print(NewBoardList(pm, monitor))
+
+	//monitor.Stop() //If called will slow like 1sec the program to close after print, with the same result (tested).
+	// it closes ungracefully, but at the end of the command we can't have races.
 }
 
-func outputListResp(resp *rpc.BoardListResp) {
-	ports := resp.GetPorts()
-	if len(ports) == 0 {
-		formatter.Print("No boards found.")
-		return
+// NewBoardList returns a new board list by adding discovered boards from the board list and a monitor.
+func NewBoardList(pm *packagemanager.PackageManager, monitor *discovery.Monitor) *output.AttachedBoardList {
+	if monitor == nil {
+		return nil
 	}
-	sort.Slice(ports, func(i, j int) bool {
-		x, y := ports[i], ports[j]
-		return x.GetProtocol() < y.GetProtocol() ||
-			(x.GetProtocol() == y.GetProtocol() && x.GetAddress() < y.GetAddress())
-	})
-	table := output.NewTable()
-	table.SetHeader("Port", "Type", "Board Name", "FQBN")
-	for _, port := range resp.GetPorts() {
-		address := port.GetProtocol() + "://" + port.GetAddress()
-		if port.GetProtocol() == "serial" {
-			address = port.GetAddress()
-		}
-		protocol := port.GetProtocolLabel()
-		if boards := port.GetBoards(); len(boards) > 0 {
-			sort.Slice(boards, func(i, j int) bool {
-				x, y := boards[i], boards[j]
-				return x.GetName() < y.GetName() || (x.GetName() == y.GetName() && x.GetFQBN() < y.GetFQBN())
+
+	serialDevices := monitor.Serial()
+	networkDevices := monitor.Network()
+	ret := &output.AttachedBoardList{
+		SerialBoards:  make([]output.SerialBoardListItem, 0, len(serialDevices)),
+		NetworkBoards: make([]output.NetworkBoardListItem, 0, len(networkDevices)),
+	}
+
+	for _, item := range serialDevices {
+		boards := pm.FindBoardsWithVidPid(item.VendorID, item.ProductID)
+		if len(boards) == 0 {
+			ret.SerialBoards = append(ret.SerialBoards, output.SerialBoardListItem{
+				Name:  "unknown",
+				Port:  item.Port,
+				UsbID: fmt.Sprintf("%s:%s - %s", item.VendorID[2:], item.ProductID[2:], item.SerialNumber),
 			})
-			for _, b := range boards {
-				board := b.GetName()
-				fqbn := b.GetFQBN()
-				table.AddRow(address, protocol, board, fqbn)
-				// show address and protocol only on the first row
-				address = ""
-				protocol = ""
-			}
-		} else {
-			board := "Unknown"
-			fqbn := ""
-			table.AddRow(address, protocol, board, fqbn)
+			continue
 		}
+
+		board := boards[0]
+		ret.SerialBoards = append(ret.SerialBoards, output.SerialBoardListItem{
+			Name:  board.Name(),
+			Fqbn:  board.FQBN(),
+			Port:  item.Port,
+			UsbID: fmt.Sprintf("%s:%s - %s", item.VendorID[2:], item.ProductID[2:], item.SerialNumber),
+		})
 	}
-	fmt.Print(table.Render())
+
+	for _, item := range networkDevices {
+		boards := pm.FindBoardsWithID(item.Name)
+		if len(boards) == 0 {
+			// skip it if not recognized
+			continue
+		}
+
+		board := boards[0]
+		ret.NetworkBoards = append(ret.NetworkBoards, output.NetworkBoardListItem{
+			Name:     board.Name(),
+			Fqbn:     board.FQBN(),
+			Location: fmt.Sprintf("%s:%d", item.Address, item.Port),
+		})
+	}
+	return ret
 }

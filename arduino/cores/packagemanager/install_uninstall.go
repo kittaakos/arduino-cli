@@ -21,6 +21,7 @@ import (
 	"fmt"
 
 	"github.com/arduino/arduino-cli/arduino/cores"
+	"github.com/sirupsen/logrus"
 )
 
 // InstallPlatform installs a specific release of a platform.
@@ -82,6 +83,8 @@ func (pm *PackageManager) InstallTool(toolRelease *cores.ToolRelease) error {
 		"tools",
 		toolRelease.Tool.Name,
 		toolRelease.Version.String())
+
+	logrus.WithField("destDir", destDir).WithField("tool", toolRelease.Tool.Name).Debug("Installing tool")
 	return toolResource.Install(pm.DownloadDir, pm.TempDir, destDir)
 }
 

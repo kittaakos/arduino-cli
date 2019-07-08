@@ -153,6 +153,15 @@ func (instance *CoreInstance) startDiscoveries() error {
 	return nil
 }
 
+// GetConfig FIXMEDOC
+func GetConfig(req InstanceContainer) *configs.Configuration {
+	i, ok := instances[req.GetInstance().GetId()]
+	if !ok {
+		return nil
+	}
+	return i.config
+}
+
 // Init FIXMEDOC
 func Init(ctx context.Context, req *rpc.InitReq, downloadCB DownloadProgressCB, taskCB TaskProgressCB, downloaderHeaders http.Header) (*rpc.InitResp, error) {
 	inConfig := req.GetConfiguration()
@@ -249,6 +258,15 @@ func UpdateIndex(ctx context.Context, req *rpc.UpdateIndexReq, downloadCB Downlo
 	coreInstance, ok := instances[id]
 	if !ok {
 		return nil, fmt.Errorf("invalid handle")
+	}
+
+	ld, err := coreInstance.lm.UpdateIndex()
+	if err != nil {
+		return nil, fmt.Errorf("downloading library index: %s", err)
+	}
+	Download(ld, "libraries", downloadCB)
+	if ld.Error() != nil {
+		return nil, fmt.Errorf("downloading library index: %s", ld.Error())
 	}
 
 	indexpath := coreInstance.config.IndexesDir()

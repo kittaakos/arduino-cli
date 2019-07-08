@@ -8,8 +8,6 @@ import (
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -1303,83 +1301,6 @@ type ArduinoCoreServer interface {
 	LibraryUpgradeAll(*LibraryUpgradeAllReq, ArduinoCore_LibraryUpgradeAllServer) error
 	LibrarySearch(context.Context, *LibrarySearchReq) (*LibrarySearchResp, error)
 	LibraryList(context.Context, *LibraryListReq) (*LibraryListResp, error)
-}
-
-// UnimplementedArduinoCoreServer can be embedded to have forward compatible implementations.
-type UnimplementedArduinoCoreServer struct {
-}
-
-func (*UnimplementedArduinoCoreServer) Init(req *InitReq, srv ArduinoCore_InitServer) error {
-	return status.Errorf(codes.Unimplemented, "method Init not implemented")
-}
-func (*UnimplementedArduinoCoreServer) Destroy(ctx context.Context, req *DestroyReq) (*DestroyResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Destroy not implemented")
-}
-func (*UnimplementedArduinoCoreServer) Rescan(ctx context.Context, req *RescanReq) (*RescanResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Rescan not implemented")
-}
-func (*UnimplementedArduinoCoreServer) UpdateIndex(req *UpdateIndexReq, srv ArduinoCore_UpdateIndexServer) error {
-	return status.Errorf(codes.Unimplemented, "method UpdateIndex not implemented")
-}
-func (*UnimplementedArduinoCoreServer) UpdateLibrariesIndex(req *UpdateLibrariesIndexReq, srv ArduinoCore_UpdateLibrariesIndexServer) error {
-	return status.Errorf(codes.Unimplemented, "method UpdateLibrariesIndex not implemented")
-}
-func (*UnimplementedArduinoCoreServer) Version(ctx context.Context, req *VersionReq) (*VersionResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Version not implemented")
-}
-func (*UnimplementedArduinoCoreServer) BoardDetails(ctx context.Context, req *BoardDetailsReq) (*BoardDetailsResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BoardDetails not implemented")
-}
-func (*UnimplementedArduinoCoreServer) BoardAttach(req *BoardAttachReq, srv ArduinoCore_BoardAttachServer) error {
-	return status.Errorf(codes.Unimplemented, "method BoardAttach not implemented")
-}
-func (*UnimplementedArduinoCoreServer) BoardList(ctx context.Context, req *BoardListReq) (*BoardListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BoardList not implemented")
-}
-func (*UnimplementedArduinoCoreServer) BoardListAll(ctx context.Context, req *BoardListAllReq) (*BoardListAllResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BoardListAll not implemented")
-}
-func (*UnimplementedArduinoCoreServer) Compile(req *CompileReq, srv ArduinoCore_CompileServer) error {
-	return status.Errorf(codes.Unimplemented, "method Compile not implemented")
-}
-func (*UnimplementedArduinoCoreServer) PlatformInstall(req *PlatformInstallReq, srv ArduinoCore_PlatformInstallServer) error {
-	return status.Errorf(codes.Unimplemented, "method PlatformInstall not implemented")
-}
-func (*UnimplementedArduinoCoreServer) PlatformDownload(req *PlatformDownloadReq, srv ArduinoCore_PlatformDownloadServer) error {
-	return status.Errorf(codes.Unimplemented, "method PlatformDownload not implemented")
-}
-func (*UnimplementedArduinoCoreServer) PlatformUninstall(req *PlatformUninstallReq, srv ArduinoCore_PlatformUninstallServer) error {
-	return status.Errorf(codes.Unimplemented, "method PlatformUninstall not implemented")
-}
-func (*UnimplementedArduinoCoreServer) PlatformUpgrade(req *PlatformUpgradeReq, srv ArduinoCore_PlatformUpgradeServer) error {
-	return status.Errorf(codes.Unimplemented, "method PlatformUpgrade not implemented")
-}
-func (*UnimplementedArduinoCoreServer) Upload(req *UploadReq, srv ArduinoCore_UploadServer) error {
-	return status.Errorf(codes.Unimplemented, "method Upload not implemented")
-}
-func (*UnimplementedArduinoCoreServer) PlatformSearch(ctx context.Context, req *PlatformSearchReq) (*PlatformSearchResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PlatformSearch not implemented")
-}
-func (*UnimplementedArduinoCoreServer) PlatformList(ctx context.Context, req *PlatformListReq) (*PlatformListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PlatformList not implemented")
-}
-func (*UnimplementedArduinoCoreServer) LibraryDownload(req *LibraryDownloadReq, srv ArduinoCore_LibraryDownloadServer) error {
-	return status.Errorf(codes.Unimplemented, "method LibraryDownload not implemented")
-}
-func (*UnimplementedArduinoCoreServer) LibraryInstall(req *LibraryInstallReq, srv ArduinoCore_LibraryInstallServer) error {
-	return status.Errorf(codes.Unimplemented, "method LibraryInstall not implemented")
-}
-func (*UnimplementedArduinoCoreServer) LibraryUninstall(req *LibraryUninstallReq, srv ArduinoCore_LibraryUninstallServer) error {
-	return status.Errorf(codes.Unimplemented, "method LibraryUninstall not implemented")
-}
-func (*UnimplementedArduinoCoreServer) LibraryUpgradeAll(req *LibraryUpgradeAllReq, srv ArduinoCore_LibraryUpgradeAllServer) error {
-	return status.Errorf(codes.Unimplemented, "method LibraryUpgradeAll not implemented")
-}
-func (*UnimplementedArduinoCoreServer) LibrarySearch(ctx context.Context, req *LibrarySearchReq) (*LibrarySearchResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LibrarySearch not implemented")
-}
-func (*UnimplementedArduinoCoreServer) LibraryList(ctx context.Context, req *LibraryListReq) (*LibraryListResp, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method LibraryList not implemented")
 }
 
 func RegisterArduinoCoreServer(s *grpc.Server, srv ArduinoCoreServer) {

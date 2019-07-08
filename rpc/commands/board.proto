@@ -68,14 +68,25 @@ message BoardListReq {
 }
 
 message BoardListResp {
-  repeated DetectedPort ports = 1;
+  repeated AttachedSerialBoard serial = 1;
+  repeated AttachedNetworkBoard network = 2;
 }
 
-message DetectedPort {
-  string address = 1;
-  string protocol = 2;
-  string protocol_label = 3;
-  repeated BoardListItem boards = 4;
+message AttachedNetworkBoard {
+  string name = 1;
+  string fqbn = 2;
+  string info = 3;
+  string address = 4;
+  uint64 port = 5;
+}
+
+message AttachedSerialBoard {
+  string name = 1;
+  string fqbn = 2;
+  string port = 3;
+  string serialNumber = 4;
+  string productID = 5;
+  string vendorID = 6;
 }
 
 message BoardListAllReq {

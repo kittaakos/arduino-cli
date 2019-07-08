@@ -80,6 +80,13 @@ message SearchOutput {
 	string ID = 1;
 	string Version = 2;
 	string Name = 3;
+	string Author = 4;
+	repeated SearchOutputBoard Boards = 5;
+}
+
+message SearchOutputBoard {
+	string name = 1;
+	string fqbn = 2;
 }
 
 message PlatformListReq {

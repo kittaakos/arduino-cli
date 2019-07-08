@@ -25,6 +25,7 @@ import (
 	"github.com/arduino/arduino-cli/arduino/libraries/librariesmanager"
 	"github.com/arduino/arduino-cli/commands"
 	rpc "github.com/arduino/arduino-cli/rpc/commands"
+	log "github.com/sirupsen/logrus"
 )
 
 type installedLib struct {
@@ -36,21 +37,79 @@ type installedLib struct {
 func LibraryList(ctx context.Context, req *rpc.LibraryListReq) (*rpc.LibraryListResp, error) {
 	lm := commands.GetLibraryManager(req)
 
-	instaledLib := []*rpc.InstalledLibrary{}
+	installedLib := []*rpc.InstalledLibrary{}
 	res := listLibraries(lm, req.GetUpdatable(), req.GetAll())
 	if len(res) > 0 {
 		for _, lib := range res {
 			libtmp := GetOutputLibrary(lib.Library)
 			release := GetOutputRelease(lib.Available)
-			instaledLib = append(instaledLib, &rpc.InstalledLibrary{
+			installedLib = append(installedLib, &rpc.InstalledLibrary{
 				Library: libtmp,
 				Release: release,
 			})
 		}
 
-		return &rpc.LibraryListResp{InstalledLibrary: instaledLib}, nil
+		return &rpc.LibraryListResp{InstalledLibrary: installedLib}, nil
 	}
 	return &rpc.LibraryListResp{}, nil
+}
+
+// List FIXMEDOC
+func List(ctx context.Context, req *rpc.LibraryListReq) (*rpc.LibraryListResp, error) {
+	log.SetLevel(log.DebugLevel)
+
+	lm := commands.GetLibraryManager(req)
+
+	res := make([]*rpc.InstalledLibrary, 0)
+	for _, libAlternatives := range lm.Libraries {
+		for _, lib := range libAlternatives.Alternatives {
+			release := &rpc.LibraryRelease{
+				Author:        lib.Author,
+				Version:       lib.Version.String(),
+				Maintainer:    lib.Maintainer,
+				Sentence:      lib.Sentence,
+				Paragraph:     lib.Paragraph,
+				Website:       lib.Website,
+				Category:      lib.Category,
+				Architectures: lib.Architectures,
+				Types:         lib.Types,
+			}
+
+			library := &rpc.Library{
+				Name:              lib.Name,
+				Author:            lib.Author,
+				Maintainer:        lib.Maintainer,
+				Sentence:          lib.Sentence,
+				Paragraph:         lib.Paragraph,
+				Website:           lib.Website,
+				Category:          lib.Category,
+				Architectures:     lib.Architectures,
+				Types:             lib.Types,
+				InstallDir:        lib.InstallDir.String(),
+				SourceDir:         lib.SourceDirs()[0].Dir.String(),
+				UtilityDir:        lib.UtilityDir.String(),
+				Location:          lib.Location.String(),
+				ContainerPlatform: lib.ContainerPlatform.String(),
+				Layout:            lib.Layout.String(),
+				RealName:          lib.RealName,
+				DotALinkage:       lib.DotALinkage,
+				Precompiled:       lib.Precompiled,
+				LdFlags:           lib.LDflags,
+				IsLegacy:          lib.IsLegacy,
+				Version:           lib.Version.String(),
+				License:           lib.License,
+				Properties:        lib.Properties.AsMap(),
+			}
+
+			res = append(res, &rpc.InstalledLibrary{
+				Library: library,
+				Release: release,
+			})
+		}
+	}
+	return &rpc.LibraryListResp{
+		InstalledLibrary: res,
+	}, nil
 }
 
 // listLibraries returns the list of installed libraries. If updatable is true it

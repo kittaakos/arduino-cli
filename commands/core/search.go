@@ -28,6 +28,12 @@ import (
 	rpc "github.com/arduino/arduino-cli/rpc/commands"
 )
 
+// PlatformSearchResult FIXMEDOC
+type PlatformSearchResult struct {
+	Release *cores.PlatformRelease
+	Package *cores.Package
+}
+
 // PlatformSearch FIXMEDOC
 func PlatformSearch(ctx context.Context, req *rpc.PlatformSearchReq) (*rpc.PlatformSearchResp, error) {
 	pm := commands.GetPackageManager(req)
@@ -37,10 +43,13 @@ func PlatformSearch(ctx context.Context, req *rpc.PlatformSearchReq) (*rpc.Platf
 
 	search := req.SearchArgs
 
-	res := []*cores.PlatformRelease{}
+	res := make([]PlatformSearchResult, 0)
 	if isUsb, _ := regexp.MatchString("[0-9a-f]{4}:[0-9a-f]{4}", search); isUsb {
 		vid, pid := search[:4], search[5:]
-		res = pm.FindPlatformReleaseProvidingBoardsWithVidPid(vid, pid)
+		boards := pm.FindPlatformReleaseProvidingBoardsWithVidPid(vid, pid)
+		for _, b := range boards {
+			res = append(res, PlatformSearchResult{Release: b})
+		}
 	} else {
 		match := func(line string) bool {
 			return strings.Contains(strings.ToLower(line), search)
@@ -52,12 +61,18 @@ func PlatformSearch(ctx context.Context, req *rpc.PlatformSearchReq) (*rpc.Platf
 					continue
 				}
 				if match(platform.Name) || match(platform.Architecture) {
-					res = append(res, platformRelease)
+					res = append(res, PlatformSearchResult{
+						Release: platformRelease,
+						Package: targetPackage,
+					})
 					continue
 				}
 				for _, board := range platformRelease.BoardsManifest {
 					if match(board.Name) {
-						res = append(res, platformRelease)
+						res = append(res, PlatformSearchResult{
+							Release: platformRelease,
+							Package: targetPackage,
+						})
 						break
 					}
 				}
@@ -66,12 +81,28 @@ func PlatformSearch(ctx context.Context, req *rpc.PlatformSearchReq) (*rpc.Platf
 	}
 
 	out := []*rpc.SearchOutput{}
-	for _, platformRelease := range res {
-		out = append(out, &rpc.SearchOutput{
-			ID:      platformRelease.Platform.String(),
-			Name:    platformRelease.Platform.Name,
-			Version: platformRelease.Version.String(),
-		})
+	for _, r := range res {
+		plt := &rpc.SearchOutput{
+			ID:      r.Release.Platform.String(),
+			Name:    r.Release.Platform.Name,
+			Version: r.Release.Version.String(),
+		}
+
+		i := 0
+		boards := make([]*rpc.SearchOutputBoard, len(r.Release.Boards))
+		for _, b := range r.Release.Boards {
+			boards[i] = &rpc.SearchOutputBoard{
+				Name: b.Name(),
+				Fqbn: b.FQBN(),
+			}
+			i++
+		}
+		plt.Boards = boards
+
+		if r.Package != nil {
+			plt.Author = r.Package.Maintainer
+		}
+		out = append(out, plt)
 	}
 	return &rpc.PlatformSearchResp{SearchOutput: out}, nil
 }
