@@ -1159,12 +1159,12 @@ external programming hardware.</p>
 compiler:</p>
 <ul>
 <li>All .ino and .pde files in the sketch folder (shown in the Arduino IDE as tabs with no extension) are concatenated
-  together, starting with the file that matches the folder name followed by the others in alphabetical order, and the
-  .cpp extension is added to the filename.</li>
+  together, starting with the file that matches the folder name followed by the others in alphabetical order. The .cpp
+  filename extension is then added to the resulting file.</li>
 <li>If not already present, <code>#include &lt;Arduino.h&gt;</code> is added to the sketch. This header file (found in the core folder for
   the currently selected board) includes all the definitions needed for the standard Arduino core.</li>
 <li>Prototypes are generated for all function definitions in .ino/.pde files that don't already have prototypes. In some
-  rare cases prototype generation may fail for some functions. To work around this, you can provide your own prototypes
+  rare cases, prototype generation may fail for some functions. To work around this, you can provide your own prototypes
   for these functions.</li>
 <li><code>#line</code> directives are added to make warning or error messages reflect the original sketch layout.</li>
 </ul>
@@ -1291,10 +1291,10 @@ compatible with it.</p>
 <h3 id="location-priority">Location Priority<a class="headerlink" href="#location-priority" title="Permanent link">&para;</a></h3>
 <p>The "location priority" is determined as follows (in order of highest to lowest priority):</p>
 <ol>
-<li>The library is in a custom libraries path specified via the
+<li>The library is under a custom libraries path specified via the
    <a href="../commands/arduino-cli_compile/#options"><code>--libraries</code> option</a> of <code>arduino-cli compile</code> (in decreasing order of
    priority when multiple custom paths are defined)</li>
-<li>The library is in the <code>libraries</code> subfolder of the IDE's sketchbook or Arduino CLI's user directory</li>
+<li>The library is under the <code>libraries</code> subfolder of the IDE's sketchbook or Arduino CLI's user directory</li>
 <li>The library is bundled with the board platform/core
    (<a href="../platform-specification/#global-predefined-properties"><code>{runtime.platform.path}/libraries</code></a>)</li>
 <li>The library is bundled with the <a href="../platform-specification/#referencing-another-core-variant-or-tool">referenced</a>
