@@ -13,7 +13,7 @@
         <meta name="description" content="Arduino Command Line Interface">
       
       
-        <link rel="canonical" href="https://arduino.github.io/arduino-cli/commands/arduino-cli_compile/">
+        <link rel="canonical" href="https://arduino.github.io/arduino-cli/commands/arduino-cli_config_remove/">
       
       
       
@@ -40,7 +40,7 @@
     
     
       
-        <title>compile - Arduino CLI</title>
+        <title>config remove - Arduino CLI</title>
       
     
     
@@ -91,7 +91,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#arduino-cli-compile" tabindex="0" class="md-skip">
+      <a href="#arduino-cli-config-remove" tabindex="0" class="md-skip">
         Skip to content
       </a>
     
@@ -117,7 +117,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                compile
+                config remove
               
             </span>
           
@@ -439,86 +439,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        compile
-      </label>
-    
-    <a href="./" title="compile" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../arduino-cli_compile/" title="compile" class="md-nav__link">
       compile
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-  
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#arduino-cli-compile" class="md-nav__link">
-    arduino-cli compile
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#synopsis" class="md-nav__link">
-    Synopsis
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
-    Examples
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#options" class="md-nav__link">
-    Options
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#options-inherited-from-parent-commands" class="md-nav__link">
-    Options inherited from parent commands
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#see-also" class="md-nav__link">
-    SEE ALSO
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -598,11 +523,86 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../arduino-cli_config_remove/" title="config remove" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        config remove
+      </label>
+    
+    <a href="./" title="config remove" class="md-nav__link md-nav__link--active">
       config remove
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#arduino-cli-config-remove" class="md-nav__link">
+    arduino-cli config remove
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#synopsis" class="md-nav__link">
+    Synopsis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options" class="md-nav__link">
+    Options
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#options-inherited-from-parent-commands" class="md-nav__link">
+    Options inherited from parent commands
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#see-also" class="md-nav__link">
+    SEE ALSO
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -1134,8 +1134,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#arduino-cli-compile" class="md-nav__link">
-    arduino-cli compile
+  <a href="#arduino-cli-config-remove" class="md-nav__link">
+    arduino-cli config remove
   </a>
   
     <nav class="md-nav">
@@ -1198,40 +1198,20 @@
               
                 
                 
-                  <h1>compile</h1>
+                  <h1>config remove</h1>
                 
-                <h2 id="arduino-cli-compile">arduino-cli compile<a class="headerlink" href="#arduino-cli-compile" title="Permanent link">&para;</a></h2>
-<p>Compiles Arduino sketches.</p>
+                <h2 id="arduino-cli-config-remove">arduino-cli config remove<a class="headerlink" href="#arduino-cli-config-remove" title="Permanent link">&para;</a></h2>
+<p>Removes one or more values from a setting.</p>
 <h3 id="synopsis">Synopsis<a class="headerlink" href="#synopsis" title="Permanent link">&para;</a></h3>
-<p>Compiles Arduino sketches.</p>
-<div class="highlight"><pre><span></span><code>arduino-cli compile [flags]
+<p>Removes one or more values from a setting.</p>
+<div class="highlight"><pre><span></span><code>arduino-cli config remove [flags]
 </code></pre></div>
 <h3 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>  arduino-cli compile -b arduino:avr:uno /home/user/Arduino/MySketch
-  arduino-cli compile -b arduino:avr:uno --build-property &quot;build.extra_flags=\&quot;-DMY_DEFINE=\&quot;hello world\&quot;\&quot;&quot; /home/user/Arduino/MySketch
-  arduino-cli compile -b arduino:avr:uno --build-property &quot;build.extra_flags=-DPIN=2 \&quot;-DMY_DEFINE=\&quot;hello world\&quot;\&quot;&quot; /home/user/Arduino/MySketch
-  arduino-cli compile -b arduino:avr:uno --build-property build.extra_flags=-DPIN=2 --build-property &quot;compiler.cpp.extra_flags=\&quot;-DSSID=\&quot;hello world\&quot;\&quot;&quot; /home/user/Arduino/MySketch
+<div class="highlight"><pre><span></span><code>  arduino-cli config remove board_manager.additional_urls https://example.com/package_example_index.json
+  arduino-cli config remove board_manager.additional_urls https://example.com/package_example_index.json https://another-url.com/package_another_index.json
 </code></pre></div>
 <h3 id="options">Options<a class="headerlink" href="#options" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>      --build-cache-path string      Builds of &#39;core.a&#39; are saved into this path to be cached and reused.
-      --build-path string            Path where to save compiled files. If omitted, a directory will be created in the default temporary path of your OS.
-      --build-property stringArray   Override a build property with a custom value. Can be used multiple times for multiple properties.
-      --clean                        Optional, cleanup the build folder and do not use any cached build.
-  -e, --export-binaries              If set built binaries will be exported to the sketch folder.
-  -b, --fqbn string                  Fully Qualified Board Name, e.g.: arduino:avr:uno
-  -h, --help                         help for compile
-      --libraries strings            List of custom libraries paths separated by commas. Or can be used multiple times for multiple libraries paths.
-      --optimize-for-debug           Optional, optimize compile output for debugging, rather than for release.
-      --output-dir string            Save build artifacts in this directory.
-  -p, --port string                  Upload port, e.g.: COM10 or /dev/ttyACM0
-      --preprocess                   Print preprocessed code to stdout instead of compiling.
-  -P, --programmer string            Optional, use the specified programmer to upload.
-      --quiet                        Optional, suppresses almost every output.
-      --show-properties              Show all build properties used instead of compiling.
-  -u, --upload                       Upload the binary after the compilation.
-  -t, --verify                       Verify uploaded binary after the upload.
-      --vid-pid string               When specified, VID/PID specific build properties are used, if board supports them.
-      --warnings string              Optional, can be &quot;none&quot;, &quot;default&quot;, &quot;more&quot; and &quot;all&quot;. Defaults to &quot;none&quot;. Used to tell gcc which warning level to use (-W flag). (default &quot;none&quot;)
+<div class="highlight"><pre><span></span><code>  -h, --help   help for remove
 </code></pre></div>
 <h3 id="options-inherited-from-parent-commands">Options inherited from parent commands<a class="headerlink" href="#options-inherited-from-parent-commands" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>      --additional-urls strings   Comma-separated list of additional URLs for the Boards Manager.
@@ -1244,7 +1224,7 @@
 </code></pre></div>
 <h3 id="see-also">SEE ALSO<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h3>
 <ul>
-<li><a href="../arduino-cli/">arduino-cli</a> - Arduino CLI.</li>
+<li><a href="../arduino-cli_config/">arduino-cli config</a> - Arduino configuration commands.</li>
 </ul>
                 
                   
@@ -1267,7 +1247,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../arduino-cli_cache_clean/" title="cache clean" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../arduino-cli_config_delete/" title="config delete" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1276,19 +1256,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                cache clean
+                config delete
               </span>
             </div>
           </a>
         
         
-          <a href="../arduino-cli_completion/" title="completion" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../arduino-cli_config_set/" title="config set" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                completion
+                config set
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
